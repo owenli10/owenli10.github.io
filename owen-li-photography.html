@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Owen Li — Photography</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:  #f5f0e8;
+    --bg2: #ede6d8;
+    --bg3: #e4dacc;
+    --border: rgba(60,40,10,0.1);
+    --border-accent: rgba(160,100,30,0.35);
+    --text: #1c1710;
+    --muted: #7a6a50;
+    --accent: #b06820;
+    --accent2: #d4924a;
+    --mono: 'IBM Plex Mono', monospace;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(245,240,232,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-size: 15px; font-weight: 600; letter-spacing: 0.06em;
+    color: var(--accent); text-decoration: none;
+    font-family: var(--serif);
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+  .nav-links a {
+    font-size: 13px; color: var(--muted); text-decoration: none;
+    letter-spacing: 0.04em; transition: color 0.2s;
+    font-family: var(--mono);
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-switch {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    padding: 8px 16px; border-radius: 2px; cursor: pointer;
+    text-decoration: none; transition: all 0.2s;
+    border: 1px solid var(--border-accent); color: var(--accent);
+    background: transparent; white-space: nowrap;
+  }
+  .nav-switch:hover { background: rgba(160,100,30,0.08); }
+
+  /* ── SECTIONS ── */
+  section { padding: 120px 48px; max-width: 1100px; margin: 0 auto; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding-top: 100px;
+    position: relative; overflow: hidden;
+  }
+  .hero-texture {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-rule='evenodd'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
+  }
+  .hero-name {
+    font-size: clamp(52px, 9vw, 108px);
+    font-weight: 300; letter-spacing: -0.01em; line-height: 0.95;
+    color: var(--text); margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.7s 0.25s forwards;
+  }
+  .hero-name em { color: var(--accent); font-style: italic; font-weight: 300; }
+  .hero-tagline {
+    font-size: clamp(17px, 2.2vw, 24px); color: var(--muted);
+    font-style: italic; font-weight: 300;
+    max-width: 520px; line-height: 1.6;
+    opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
+  }
+  .hero-cta {
+    margin-top: 52px; display: flex; gap: 16px; align-items: center;
+    opacity: 0; animation: fadeUp 0.7s 0.55s forwards;
+  }
+  .btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em;
+    padding: 12px 28px; border-radius: 2px; cursor: pointer;
+    text-decoration: none; transition: all 0.2s; display: inline-block;
+  }
+  .btn-primary { background: var(--accent); color: #f5f0e8; font-weight: 500; }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-ghost {
+    border: 1px solid var(--border-accent); color: var(--accent); background: transparent;
+  }
+  .btn-ghost:hover { background: rgba(160,100,30,0.07); }
+
+  .hero-stats {
+    margin-top: 80px; display: flex; gap: 48px;
+    border-top: 1px solid var(--border); padding-top: 40px;
+    opacity: 0; animation: fadeUp 0.7s 0.7s forwards;
+  }
+  .stat-num { font-size: 34px; font-weight: 300; color: var(--accent); display: block; font-style: italic; }
+  .stat-label { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; font-family: var(--mono); text-transform: uppercase; }
+
+  /* ── ABOUT ── */
+  #about { border-top: 1px solid var(--border); }
+  .section-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 48px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .about-text p { font-size: 18px; color: var(--muted); line-height: 1.9; margin-bottom: 20px; font-weight: 300; }
+  .about-text p strong { color: var(--text); font-family: var(--mono); font-size: 14px; font-weight: 500; }
+  .about-details { display: flex; flex-direction: column; gap: 0; }
+  .detail-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 14px;
+    font-family: var(--mono);
+  }
+  .detail-key { color: var(--muted); letter-spacing: 0.06em; font-size: 12px; }
+  .detail-val { color: var(--text); text-align: right; font-size: 13px; }
+
+  /* ── PHOTOS (project grid) ── */
+  #projects { border-top: 1px solid var(--border); }
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1px; background: var(--border); border: 1px solid var(--border);
+  }
+  .project-card {
+    background: var(--bg); padding: 0;
+    transition: background 0.2s; cursor: pointer;
+    position: relative; overflow: hidden;
+  }
+  .project-card:hover { background: var(--bg2); }
+  .project-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: var(--accent);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+  }
+  .project-card:hover::before { transform: scaleX(1); }
+
+  /* Placeholder photo block using CSS patterns */
+  .photo-thumb {
+    width: 100%; height: 200px; display: block; overflow: hidden; position: relative;
+  }
+  .photo-thumb svg { width: 100%; height: 100%; display: block; }
+
+  .card-body { padding: 28px 28px 32px; }
+  .proj-num {
+    font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.12em;
+    margin-bottom: 12px; display: block;
+  }
+  .proj-title { font-size: 20px; font-weight: 400; color: var(--text); margin-bottom: 10px; line-height: 1.25; }
+  .proj-desc { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; font-weight: 300; }
+  .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .proj-tag {
+    font-family: var(--mono); font-size: 10px; padding: 4px 10px; letter-spacing: 0.08em;
+    border: 1px solid var(--border-accent); color: var(--accent);
+    border-radius: 2px; text-transform: uppercase;
+  }
+  .proj-open-hint {
+    font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em;
+    margin-top: 18px; opacity: 0; transition: opacity 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .proj-open-hint::before { content: '↗'; font-size: 13px; }
+  .project-card:hover .proj-open-hint { opacity: 1; }
+
+  /* ── SKILLS / GEAR ── */
+  #skills { border-top: 1px solid var(--border); }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; }
+  .skill-group-title {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  .skill-list { display: flex; flex-direction: column; gap: 8px; }
+  .skill-item {
+    font-family: var(--mono); font-size: 13px; color: var(--muted); padding: 10px 14px;
+    border: 1px solid var(--border); border-radius: 2px;
+    transition: all 0.15s; display: flex; align-items: center; gap: 10px;
+  }
+  .skill-item:hover { border-color: var(--border-accent); color: var(--text); }
+  .skill-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+  /* ── CONTACT ── */
+  #contact { border-top: 1px solid var(--border); }
+  .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .contact-heading { font-size: clamp(28px, 4.5vw, 54px); font-weight: 300; line-height: 1.1; color: var(--text); margin-bottom: 20px; }
+  .contact-heading em { color: var(--accent); font-style: italic; }
+  .contact-sub { font-size: 16px; color: var(--muted); line-height: 1.7; font-style: italic; font-weight: 300; }
+  .contact-links { display: flex; flex-direction: column; gap: 12px; }
+  .contact-link {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px; border: 1px solid var(--border);
+    text-decoration: none; transition: all 0.2s; border-radius: 2px;
+  }
+  .contact-link:hover { border-color: var(--border-accent); background: rgba(160,100,30,0.04); }
+  .cl-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+  .cl-val { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+  .cl-arrow { color: var(--muted); font-size: 18px; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .footer-copy { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .footer-back { font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; letter-spacing: 0.06em; transition: color 0.2s; }
+  .footer-back:hover { color: var(--accent); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(28,23,16,0.88);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: flex-start; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    overflow-y: auto; padding: 60px 24px;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--bg2); border: 1px solid var(--border-accent);
+    border-radius: 4px; width: 100%; max-width: 780px; padding: 48px 52px;
+    position: relative;
+    transform: translateY(32px); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-close {
+    position: absolute; top: 20px; right: 20px;
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em;
+    padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: all 0.2s;
+  }
+  .modal-close:hover { border-color: var(--border-accent); color: var(--accent); }
+
+  /* Modal photo preview */
+  .modal-photo { width: 100%; height: 260px; margin-bottom: 32px; overflow: hidden; border-radius: 2px; }
+  .modal-photo svg { width: 100%; height: 100%; display: block; }
+
+  .modal-num { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.14em; margin-bottom: 14px; }
+  .modal-title { font-size: clamp(24px, 3.5vw, 38px); font-weight: 300; color: var(--text); line-height: 1.15; margin-bottom: 28px; }
+  .modal-divider { height: 1px; background: var(--border); margin-bottom: 28px; }
+  .modal-section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+  .modal-desc { font-size: 16px; color: var(--muted); line-height: 1.9; margin-bottom: 36px; font-weight: 300; font-style: italic; }
+  .modal-details-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border: 1px solid var(--border); margin-bottom: 36px;
+  }
+  .modal-detail { padding: 14px 18px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+  .modal-detail:nth-child(even) { border-right: none; }
+  .modal-detail:nth-last-child(-n+2) { border-bottom: none; }
+  .modal-detail-key { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  .modal-detail-val { font-family: var(--mono); font-size: 13px; color: var(--text); }
+  .modal-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 36px; }
+  .modal-tag { font-family: var(--mono); font-size: 11px; padding: 5px 12px; letter-spacing: 0.08em; border: 1px solid var(--border-accent); color: var(--accent); border-radius: 2px; text-transform: uppercase; }
+  .modal-actions { display: flex; gap: 12px; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s, transform 0.6s; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    section { padding: 80px 24px; }
+    .about-grid, .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+    .hero-stats { gap: 32px; }
+    footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
+    .nav-links { display: none; }
+    .modal { padding: 32px 24px; }
+    .modal-details-grid { grid-template-columns: 1fr; }
+    .modal-detail { border-right: none; }
+    .modal-detail:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); }
+    .modal-detail:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">Owen Li</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Series</a></li>
+    <li><a href="#skills">Gear</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="owen-li-portfolio.html" class="nav-switch">← Engineering</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-label">Photography</div>
+  <h1 class="hero-name">Owen<br><em>Li.</em></h1>
+  <p class="hero-tagline">Light, form, and the quiet geometry of the world between engineering sessions.</p>
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-primary">View Series</a>
+    <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <span class="stat-num">6</span>
+      <span class="stat-label">Series</span>
+    </div>
+    <div>
+      <span class="stat-num">35mm</span>
+      <span class="stat-label">Primary format</span>
+    </div>
+    <div>
+      <span class="stat-num">Film</span>
+      <span class="stat-label">& Digital</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label reveal">About</div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Photography is where I go when the equations stop. I'm drawn to <strong>industrial texture</strong>, <strong>long exposures</strong>, and the structural honesty of things built to last — whether that's a suspension bridge or a weathered doorframe.</p>
+      <p>I shoot primarily on 35mm film, with a preference for grain over polish. The imperfection is the point. Engineering taught me to eliminate failure; photography taught me to find beauty in it.</p>
+      <p>Based in the United States, shooting wherever the light is interesting.</p>
+    </div>
+    <div class="about-details reveal">
+      <div class="detail-row"><span class="detail-key">Discipline</span><span class="detail-val">Film & Digital Photography</span></div>
+      <div class="detail-row"><span class="detail-key">Subjects</span><span class="detail-val">Architecture, Industrial, Landscape</span></div>
+      <div class="detail-row"><span class="detail-key">Primary body</span><span class="detail-val">Nikon FM2 / Sony A7</span></div>
+      <div class="detail-row"><span class="detail-key">Film stock</span><span class="detail-val">Kodak Portra 400, HP5</span></div>
+      <div class="detail-row"><span class="detail-key">Prints</span><span class="detail-val" style="color:var(--accent)">Available on request</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERIES / PROJECTS -->
+<section id="projects">
+  <div class="section-label reveal">Series</div>
+  <div class="projects-grid">
+
+    <div class="project-card reveal" data-project="0">
+      <div class="photo-thumb">
+        <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="200" fill="#2a2018"/>
+          <rect x="0" y="120" width="400" height="80" fill="#1a1208"/>
+          <line x1="0" y1="100" x2="400" y2="110" stroke="#b06820" stroke-width="1" opacity="0.4"/>
+          <rect x="60" y="40" width="8" height="80" fill="#4a3820" opacity="0.8"/>
+          <rect x="100" y="20" width="8" height="100" fill="#4a3820" opacity="0.8"/>
+          <rect x="160" y="50" width="6" height="70" fill="#4a3820" opacity="0.7"/>
+          <rect x="220" y="30" width="10" height="90" fill="#3a2810" opacity="0.9"/>
+          <rect x="290" y="45" width="7" height="75" fill="#4a3820" opacity="0.8"/>
+          <rect x="340" y="25" width="9" height="95" fill="#3a2810" opacity="0.8"/>
+          <circle cx="200" cy="60" r="18" fill="none" stroke="#d4924a" stroke-width="0.5" opacity="0.3"/>
+          <text x="200" y="175" text-anchor="middle" fill="#7a6a50" font-size="10" font-family="monospace" opacity="0.6">Industrial Series</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="proj-num">01 / Series</span>
+        <div class="proj-title">Steel & Shadow</div>
+        <p class="proj-desc">Long-exposure studies of industrial infrastructure at dusk — cranes, gantries, and the geometry of utility.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">35mm Film</span>
+          <span class="proj-tag">Long Exposure</span>
+          <span class="proj-tag">Industrial</span>
+        </div>
+        <div class="proj-open-hint">View series</div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-project="1">
+      <div class="photo-thumb">
+        <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="200" fill="#e8dcc8"/>
+          <rect x="0" y="140" width="400" height="60" fill="#c8b898"/>
+          <rect x="140" y="60" width="120" height="80" fill="#a09070" opacity="0.5"/>
+          <rect x="160" y="80" width="20" height="60" fill="#7a6a50" opacity="0.7"/>
+          <rect x="220" y="80" width="20" height="60" fill="#7a6a50" opacity="0.7"/>
+          <rect x="140" y="55" width="120" height="8" fill="#8a7860"/>
+          <rect x="80" y="90" width="50" height="50" fill="#b0a080" opacity="0.4"/>
+          <rect x="270" y="100" width="60" height="40" fill="#b0a080" opacity="0.4"/>
+          <circle cx="200" cy="30" r="20" fill="#d4924a" opacity="0.25"/>
+          <text x="200" y="185" text-anchor="middle" fill="#7a6a50" font-size="10" font-family="monospace" opacity="0.6">Architecture Series</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="proj-num">02 / Series</span>
+        <div class="proj-title">Concrete Grammar</div>
+        <p class="proj-desc">Brutalist and modernist architecture shot at high noon — the way hard light reveals structure and intent.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">Digital</span>
+          <span class="proj-tag">Architecture</span>
+          <span class="proj-tag">Brutalism</span>
+        </div>
+        <div class="proj-open-hint">View series</div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-project="2">
+      <div class="photo-thumb">
+        <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="200" fill="#1c2818"/>
+          <rect x="0" y="130" width="400" height="70" fill="#0c1808"/>
+          <ellipse cx="200" cy="80" rx="160" ry="50" fill="#283820" opacity="0.6"/>
+          <circle cx="200" cy="40" r="14" fill="#d4924a" opacity="0.7"/>
+          <line x1="186" y1="40" x2="50" y2="160" stroke="#d4924a" stroke-width="0.5" opacity="0.2"/>
+          <line x1="214" y1="40" x2="350" y2="160" stroke="#d4924a" stroke-width="0.5" opacity="0.2"/>
+          <rect x="30" y="130" width="20" height="40" fill="#2a4020" opacity="0.8"/>
+          <rect x="70" y="115" width="15" height="55" fill="#2a4020" opacity="0.9"/>
+          <rect x="130" y="110" width="12" height="60" fill="#2a4020" opacity="0.7"/>
+          <rect x="250" y="118" width="14" height="52" fill="#2a4020" opacity="0.8"/>
+          <rect x="320" y="125" width="18" height="45" fill="#2a4020" opacity="0.7"/>
+          <text x="200" y="185" text-anchor="middle" fill="#7a6a50" font-size="10" font-family="monospace" opacity="0.6">Landscape Series</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="proj-num">03 / Series</span>
+        <div class="proj-title">Last Light</div>
+        <p class="proj-desc">Golden-hour and blue-hour landscapes from the American West — big skies, small figures, immense quiet.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">Medium Format</span>
+          <span class="proj-tag">Landscape</span>
+          <span class="proj-tag">Golden Hour</span>
+        </div>
+        <div class="proj-open-hint">View series</div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-project="3">
+      <div class="photo-thumb">
+        <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="200" fill="#d8cfc0"/>
+          <line x1="0" y1="50" x2="400" y2="60" stroke="#8a7860" stroke-width="1" opacity="0.3"/>
+          <line x1="0" y1="90" x2="400" y2="95" stroke="#8a7860" stroke-width="1" opacity="0.3"/>
+          <line x1="0" y1="130" x2="400" y2="128" stroke="#8a7860" stroke-width="1" opacity="0.3"/>
+          <line x1="0" y1="165" x2="400" y2="160" stroke="#8a7860" stroke-width="1" opacity="0.3"/>
+          <line x1="80" y1="0" x2="75" y2="200" stroke="#8a7860" stroke-width="0.8" opacity="0.25"/>
+          <line x1="200" y1="0" x2="198" y2="200" stroke="#8a7860" stroke-width="0.8" opacity="0.25"/>
+          <line x1="320" y1="0" x2="325" y2="200" stroke="#8a7860" stroke-width="0.8" opacity="0.25"/>
+          <circle cx="198" cy="95" r="22" fill="#b06820" opacity="0.18"/>
+          <circle cx="198" cy="95" r="8" fill="#b06820" opacity="0.4"/>
+          <text x="200" y="185" text-anchor="middle" fill="#7a6a50" font-size="10" font-family="monospace" opacity="0.6">Abstract Series</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="proj-num">04 / Series</span>
+        <div class="proj-title">Field Notes</div>
+        <p class="proj-desc">Close-up abstractions of surfaces, textures, and patterns found in everyday engineering environments.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">Macro</span>
+          <span class="proj-tag">Abstract</span>
+          <span class="proj-tag">Texture</span>
+        </div>
+        <div class="proj-open-hint">View series</div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-project="4">
+      <div class="photo-thumb">
+        <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="200" fill="#f0e8d8"/>
+          <rect x="0" y="110" width="400" height="90" fill="#c8b898" opacity="0.5"/>
+          <path d="M0,110 Q100,95 200,110 Q300,125 400,110 L400,200 L0,200Z" fill="#d8c8a8" opacity="0.6"/>
+          <ellipse cx="200" cy="108" rx="180" ry="15" fill="#c0b090" opacity="0.3"/>
+          <rect x="170" y="50" width="60" height="60" fill="none" stroke="#b06820" stroke-width="1" opacity="0.3"/>
+          <line x1="170" y1="50" x2="230" y2="110" stroke="#b06820" stroke-width="0.5" opacity="0.2"/>
+          <line x1="230" y1="50" x2="170" y2="110" stroke="#b06820" stroke-width="0.5" opacity="0.2"/>
+          <text x="200" y="185" text-anchor="middle" fill="#7a6a50" font-size="10" font-family="monospace" opacity="0.6">Seascape Series</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="proj-num">05 / Series</span>
+        <div class="proj-title">Still Water</div>
+        <p class="proj-desc">Harbour and coastal studies on expired Kodak Portra — the grain pairs well with fog and salt air.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">Expired Film</span>
+          <span class="proj-tag">Seascape</span>
+          <span class="proj-tag">Portra 400</span>
+        </div>
+        <div class="proj-open-hint">View series</div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-project="5">
+      <div class="photo-thumb">
+        <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="200" fill="#2a2018"/>
+          <rect x="80" y="30" width="240" height="140" fill="#1a1208"/>
+          <rect x="80" y="30" width="240" height="4" fill="#b06820" opacity="0.4"/>
+          <rect x="80" y="166" width="240" height="4" fill="#b06820" opacity="0.4"/>
+          <rect x="80" y="30" width="4" height="140" fill="#b06820" opacity="0.4"/>
+          <rect x="316" y="30" width="4" height="140" fill="#b06820" opacity="0.4"/>
+          <text x="200" y="108" text-anchor="middle" fill="#7a6a50" font-size="13" font-family="monospace">Your Series Here</text>
+          <text x="200" y="128" text-anchor="middle" fill="#4a3820" font-size="10" font-family="monospace">Add your photos</text>
+          <text x="200" y="185" text-anchor="middle" fill="#7a6a50" font-size="10" font-family="monospace" opacity="0.6">Placeholder</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="proj-num">06 / Series</span>
+        <div class="proj-title">Add Your Series Here</div>
+        <p class="proj-desc">Replace this with your own photographic series. Describe your subject, approach, and what drew you to it.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">Genre</span>
+          <span class="proj-tag">Format</span>
+        </div>
+        <div class="proj-open-hint">View series</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GEAR / SKILLS -->
+<section id="skills">
+  <div class="section-label reveal">Gear & Process</div>
+  <div class="skills-grid">
+    <div class="reveal">
+      <div class="skill-group-title">Film Bodies</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-dot"></span>Nikon FM2</div>
+        <div class="skill-item"><span class="skill-dot"></span>Mamiya RB67</div>
+        <div class="skill-item"><span class="skill-dot"></span>Olympus XA2</div>
+        <div class="skill-item"><span class="skill-dot"></span>Canon AE-1</div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="skill-group-title">Digital Bodies</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-dot"></span>Sony A7 III</div>
+        <div class="skill-item"><span class="skill-dot"></span>Fujifilm X-T4</div>
+        <div class="skill-item"><span class="skill-dot"></span>DJI Mini (aerial)</div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="skill-group-title">Film Stocks</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-dot"></span>Kodak Portra 400</div>
+        <div class="skill-item"><span class="skill-dot"></span>Ilford HP5 Plus</div>
+        <div class="skill-item"><span class="skill-dot"></span>Kodak Ektar 100</div>
+        <div class="skill-item"><span class="skill-dot"></span>CineStill 800T</div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="skill-group-title">Post-processing</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-dot"></span>Darkroom (home lab)</div>
+        <div class="skill-item"><span class="skill-dot"></span>Lightroom Classic</div>
+        <div class="skill-item"><span class="skill-dot"></span>Capture One</div>
+        <div class="skill-item"><span class="skill-dot"></span>Silver Efex Pro</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label reveal">Contact</div>
+  <div class="contact-inner">
+    <div class="reveal">
+      <h2 class="contact-heading">Let's<br><em>talk.</em></h2>
+      <p class="contact-sub">Prints available on request. Open to collaboration, editorial work, and commissions.</p>
+    </div>
+    <div class="contact-links reveal">
+      <a href="mailto:owen.li@email.com" class="contact-link">
+        <div><div class="cl-label">Email</div><div class="cl-val">owen.li@email.com</div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="https://instagram.com/owenli" target="_blank" class="contact-link">
+        <div><div class="cl-label">Instagram</div><div class="cl-val">@owenli</div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="https://vsco.co/owenli" target="_blank" class="contact-link">
+        <div><div class="cl-label">VSCO</div><div class="cl-val">vsco.co/owenli</div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="#" class="contact-link">
+        <div><div class="cl-label">Print Inquiry</div><div class="cl-val">Request a print →</div></div>
+        <span class="cl-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">© 2026 Owen Li. All rights reserved.</span>
+  <a href="#hero" class="footer-back">Back to top ↑</a>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" id="modalBox">
+    <button class="modal-close" id="modalClose">ESC / Close</button>
+    <div class="modal-photo" id="modalPhoto"></div>
+    <div class="modal-num" id="modalNum"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-divider"></div>
+    <div class="modal-section-label">About this series</div>
+    <p class="modal-desc" id="modalDesc"></p>
+    <div class="modal-section-label">Details</div>
+    <div class="modal-details-grid" id="modalDetails"></div>
+    <div class="modal-section-label">Technical</div>
+    <div class="modal-tags" id="modalTags"></div>
+    <div class="modal-actions">
+      <a href="#" class="btn btn-ghost" id="modalPrev">← Prev</a>
+      <a href="#" class="btn btn-ghost" id="modalNext">Next →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const projects = [
+  {
+    num: '01 / Series',
+    title: 'Steel & Shadow',
+    svgPreview: `<svg viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg"><rect width="740" height="260" fill="#2a2018"/><rect x="0" y="160" width="740" height="100" fill="#1a1208"/><line x1="0" y1="130" x2="740" y2="145" stroke="#b06820" stroke-width="1" opacity="0.4"/><rect x="80" y="40" width="14" height="120" fill="#4a3820" opacity="0.8"/><rect x="160" y="20" width="12" height="140" fill="#4a3820" opacity="0.9"/><rect x="280" y="55" width="10" height="105" fill="#4a3820" opacity="0.7"/><rect x="400" y="30" width="16" height="130" fill="#3a2810" opacity="0.9"/><rect x="520" y="48" width="11" height="112" fill="#4a3820" opacity="0.8"/><rect x="640" y="25" width="14" height="135" fill="#3a2810" opacity="0.8"/><circle cx="370" cy="80" r="28" fill="none" stroke="#d4924a" stroke-width="0.8" opacity="0.3"/></svg>`,
+    desc: 'Taken over several months at port facilities and rail yards in the Pacific Northwest. Shot exclusively at dusk and overnight, relying on the last available light before resorting to long exposures measured in minutes. The cranes become silhouettes; the shadows become architecture.',
+    details: [
+      { key: 'Format', val: '35mm Film' },
+      { key: 'Location', val: 'Pacific Northwest' },
+      { key: 'Period', val: '2023 – 2024' },
+      { key: 'Prints', val: 'Available (8×10, 11×14)' },
+    ],
+    tags: ['Nikon FM2', 'Ilford HP5', 'Long Exposure', 'Industrial', 'B&W']
+  },
+  {
+    num: '02 / Series',
+    title: 'Concrete Grammar',
+    svgPreview: `<svg viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg"><rect width="740" height="260" fill="#e8dcc8"/><rect x="0" y="180" width="740" height="80" fill="#c8b898"/><rect x="260" y="70" width="220" height="110" fill="#a09070" opacity="0.5"/><rect x="300" y="100" width="40" height="80" fill="#7a6a50" opacity="0.7"/><rect x="400" y="100" width="40" height="80" fill="#7a6a50" opacity="0.7"/><rect x="260" y="64" width="220" height="10" fill="#8a7860"/><rect x="120" y="120" width="100" height="60" fill="#b0a080" opacity="0.4"/><rect x="520" y="130" width="100" height="50" fill="#b0a080" opacity="0.4"/><circle cx="370" cy="35" r="30" fill="#d4924a" opacity="0.25"/></svg>`,
+    desc: 'A study in the vocabulary of post-war architecture — pilotis, béton brut, ribbon windows. Shot at solar noon to eliminate mood and leave only structure. The harshness of overhead light, usually avoided, becomes the point: these buildings were designed to cast bold shadows and they do.',
+    details: [
+      { key: 'Format', val: 'Digital (Sony A7 III)' },
+      { key: 'Location', val: 'Various US cities' },
+      { key: 'Period', val: '2022 – ongoing' },
+      { key: 'Prints', val: 'Available (various sizes)' },
+    ],
+    tags: ['Sony A7 III', 'Architecture', 'Brutalism', 'Midday light', 'Colour']
+  },
+  {
+    num: '03 / Series',
+    title: 'Last Light',
+    svgPreview: `<svg viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg"><rect width="740" height="260" fill="#1c2818"/><rect x="0" y="170" width="740" height="90" fill="#0c1808"/><ellipse cx="370" cy="155" rx="340" ry="60" fill="#283820" opacity="0.6"/><circle cx="370" cy="50" r="22" fill="#d4924a" opacity="0.7"/><line x1="348" y1="50" x2="80" y2="220" stroke="#d4924a" stroke-width="0.7" opacity="0.2"/><line x1="392" y1="50" x2="660" y2="220" stroke="#d4924a" stroke-width="0.7" opacity="0.2"/><rect x="40" y="165" width="32" height="55" fill="#2a4020" opacity="0.8"/><rect x="110" y="148" width="24" height="72" fill="#2a4020" opacity="0.9"/><rect x="220" y="143" width="20" height="77" fill="#2a4020" opacity="0.7"/><rect x="480" y="150" width="22" height="70" fill="#2a4020" opacity="0.8"/><rect x="590" y="158" width="28" height="62" fill="#2a4020" opacity="0.7"/></svg>`,
+    desc: 'Landscapes from Utah, Nevada, and New Mexico — chased across three road trips over two summers. Medium format adds a density to the light that 35mm can\'t quite replicate. The goal was never the landmark; it was the moment twenty minutes before, when the colour was still changing.',
+    details: [
+      { key: 'Format', val: 'Medium Format (Mamiya RB67)' },
+      { key: 'Location', val: 'American Southwest' },
+      { key: 'Period', val: '2023 – 2024' },
+      { key: 'Prints', val: 'Available (12×16 and larger)' },
+    ],
+    tags: ['Mamiya RB67', 'Kodak Portra 400', 'Golden Hour', 'Landscape', 'Road trip']
+  },
+  {
+    num: '04 / Series',
+    title: 'Field Notes',
+    svgPreview: `<svg viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg"><rect width="740" height="260" fill="#d8cfc0"/><line x1="0" y1="65" x2="740" y2="75" stroke="#8a7860" stroke-width="1.5" opacity="0.3"/><line x1="0" y1="120" x2="740" y2="125" stroke="#8a7860" stroke-width="1.5" opacity="0.3"/><line x1="0" y1="175" x2="740" y2="172" stroke="#8a7860" stroke-width="1.5" opacity="0.3"/><line x1="140" y1="0" x2="135" y2="260" stroke="#8a7860" stroke-width="1" opacity="0.25"/><line x1="370" y1="0" x2="368" y2="260" stroke="#8a7860" stroke-width="1" opacity="0.25"/><line x1="600" y1="0" x2="603" y2="260" stroke="#8a7860" stroke-width="1" opacity="0.25"/><circle cx="368" cy="125" r="36" fill="#b06820" opacity="0.18"/><circle cx="368" cy="125" r="12" fill="#b06820" opacity="0.4"/></svg>`,
+    desc: 'Close-up work made during engineering fieldwork and lab sessions — rust patterns, cable cross-sections, the micro-texture of machined aluminium. An engineer\'s eye turned inward on itself. Shot on a macro lens; the images are rarely identifiable as what they are.',
+    details: [
+      { key: 'Format', val: 'Digital macro' },
+      { key: 'Location', val: 'Lab & field environments' },
+      { key: 'Period', val: '2021 – ongoing' },
+      { key: 'Prints', val: 'Available on request' },
+    ],
+    tags: ['Sony A7 III', 'Macro lens', 'Abstract', 'Texture', 'Engineering']
+  },
+  {
+    num: '05 / Series',
+    title: 'Still Water',
+    svgPreview: `<svg viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg"><rect width="740" height="260" fill="#f0e8d8"/><rect x="0" y="145" width="740" height="115" fill="#c8b898" opacity="0.5"/><path d="M0,145 Q185,128 370,145 Q555,162 740,145 L740,260 L0,260Z" fill="#d8c8a8" opacity="0.6"/><ellipse cx="370" cy="142" rx="340" ry="20" fill="#c0b090" opacity="0.3"/><rect x="310" y="60" width="120" height="85" fill="none" stroke="#b06820" stroke-width="1.5" opacity="0.3"/><line x1="310" y1="60" x2="430" y2="145" stroke="#b06820" stroke-width="0.7" opacity="0.2"/><line x1="430" y1="60" x2="310" y2="145" stroke="#b06820" stroke-width="0.7" opacity="0.2"/></svg>`,
+    desc: 'Coastal photographs made along the Oregon and Maine shorelines using a batch of expired Portra 400. The colour shift from age — a warm cast, a lift in the shadows — turned out to suit the subject perfectly. These are slow pictures: harbours at rest, boats waiting, light going flat.',
+    details: [
+      { key: 'Format', val: '35mm Film (expired)' },
+      { key: 'Location', val: 'Oregon & Maine coasts' },
+      { key: 'Period', val: '2024' },
+      { key: 'Prints', val: 'Limited edition (10 prints)' },
+    ],
+    tags: ['Canon AE-1', 'Expired Portra 400', 'Seascape', 'Coastal', 'Colour shift']
+  },
+  {
+    num: '06 / Series',
+    title: 'Add Your Series Here',
+    svgPreview: `<svg viewBox="0 0 740 260" xmlns="http://www.w3.org/2000/svg"><rect width="740" height="260" fill="#2a2018"/><rect x="180" y="50" width="380" height="160" fill="#1a1208"/><rect x="180" y="50" width="380" height="5" fill="#b06820" opacity="0.4"/><rect x="180" y="205" width="380" height="5" fill="#b06820" opacity="0.4"/><rect x="180" y="50" width="5" height="160" fill="#b06820" opacity="0.4"/><rect x="555" y="50" width="5" height="160" fill="#b06820" opacity="0.4"/><text x="370" y="138" text-anchor="middle" fill="#7a6a50" font-size="16" font-family="monospace">Your Series Here</text></svg>`,
+    desc: 'Replace this with your own photographic series. Describe your subject matter, what drew you to it, and how you approached shooting it. Two to four sentences works well here.',
+    details: [
+      { key: 'Format', val: 'Your format' },
+      { key: 'Location', val: 'Your location' },
+      { key: 'Period', val: 'Your dates' },
+      { key: 'Prints', val: 'Your availability' },
+    ],
+    tags: ['Camera', 'Film / Sensor', 'Genre', 'Style']
+  }
+];
+
+let currentProject = 0;
+
+function openModal(idx) {
+  currentProject = idx;
+  const p = projects[idx];
+  document.getElementById('modalNum').textContent = p.num;
+  document.getElementById('modalTitle').textContent = p.title;
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalPhoto').innerHTML = p.svgPreview;
+  document.getElementById('modalDetails').innerHTML = p.details
+    .map(d => `<div class="modal-detail"><div class="modal-detail-key">${d.key}</div><div class="modal-detail-val">${d.val}</div></div>`)
+    .join('');
+  document.getElementById('modalTags').innerHTML = p.tags
+    .map(t => `<span class="modal-tag">${t}</span>`).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('.project-card').forEach(card => {
+  card.addEventListener('click', () => openModal(parseInt(card.dataset.project)));
+});
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+document.getElementById('modalPrev').addEventListener('click', e => {
+  e.preventDefault();
+  openModal((currentProject - 1 + projects.length) % projects.length);
+});
+document.getElementById('modalNext').addEventListener('click', e => {
+  e.preventDefault();
+  openModal((currentProject + 1) % projects.length);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if (document.getElementById('modalOverlay').classList.contains('open')) {
+    if (e.key === 'ArrowRight') openModal((currentProject + 1) % projects.length);
+    if (e.key === 'ArrowLeft') openModal((currentProject - 1 + projects.length) % projects.length);
+  }
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
