@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Owen Li — Art & Design</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:  #f2ece8;
+    --bg2: #ebe3de;
+    --bg3: #e3d8d2;
+    --border: rgba(80,20,20,0.1);
+    --border-accent: rgba(120,20,35,0.35);
+    --text: #1e0e10;
+    --muted: #7a5a5e;
+    --accent: #7c1828;
+    --accent2: #a83040;
+    --mono: 'IBM Plex Mono', monospace;
+    --serif: 'DM Serif Display', Georgia, serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(242,236,232,0.9);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--serif); font-size: 17px; font-weight: 400;
+    color: var(--accent); text-decoration: none; letter-spacing: 0.02em;
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+  .nav-links a {
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    text-decoration: none; letter-spacing: 0.06em; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── DROPDOWN ── */
+  .nav-dropdown { position: relative; list-style: none; }
+  .nav-dropdown-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    padding: 8px 16px; border-radius: 2px; cursor: pointer;
+    border: 1px solid var(--border-accent); color: var(--accent);
+    background: transparent; white-space: nowrap;
+    display: flex; align-items: center; gap: 8px; transition: all 0.2s;
+  }
+  .nav-dropdown-btn:hover,
+  .nav-dropdown.open .nav-dropdown-btn { background: rgba(120,20,35,0.08); }
+  .nav-dropdown-chevron {
+    display: inline-block; width: 8px; height: 8px;
+    border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg) translateY(-2px); transition: transform 0.2s; flex-shrink: 0;
+  }
+  .nav-dropdown.open .nav-dropdown-chevron { transform: rotate(-135deg) translateY(-2px); }
+  .nav-dropdown-menu {
+    position: absolute; top: calc(100% + 8px); right: 0;
+    background: rgba(242,236,232,0.97);
+    border: 1px solid var(--border-accent);
+    border-radius: 2px; min-width: 180px; overflow: hidden;
+    opacity: 0; pointer-events: none; transform: translateY(-6px);
+    transition: opacity 0.18s, transform 0.18s;
+    backdrop-filter: blur(14px); z-index: 200;
+  }
+  .nav-dropdown.open .nav-dropdown-menu { opacity: 1; pointer-events: all; transform: translateY(0); }
+  .nav-dropdown-menu a {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 16px; font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.08em; color: var(--muted); text-decoration: none;
+    border-bottom: 1px solid var(--border); transition: all 0.15s;
+  }
+  .nav-dropdown-menu a:last-child { border-bottom: none; }
+  .nav-dropdown-menu a:hover { color: var(--accent); background: rgba(120,20,35,0.06); }
+  .nav-dropdown-menu a span { opacity: 0.4; font-size: 13px; }
+
+  /* ── SECTIONS ── */
+  section { padding: 120px 48px; max-width: 1100px; margin: 0 auto; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding-top: 100px; position: relative; overflow: hidden;
+  }
+
+  /* Halftone-dot texture background */
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  }
+  .hero-bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(120,20,35,0.1) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(ellipse 70% 70% at 80% 50%, black 20%, transparent 80%);
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute; top: -120px; right: -80px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(120,20,35,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 24px;
+    opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
+  }
+  .hero-name {
+    font-size: clamp(56px, 10vw, 120px);
+    font-weight: 400; line-height: 0.9; letter-spacing: -0.01em;
+    color: var(--text); margin-bottom: 32px;
+    opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+  }
+  .hero-name em { color: var(--accent); font-style: italic; }
+  .hero-tagline {
+    font-size: clamp(17px, 2vw, 22px); color: var(--muted);
+    font-style: italic; max-width: 500px; line-height: 1.6;
+    opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
+  }
+  .hero-cta {
+    margin-top: 52px; display: flex; gap: 16px;
+    opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+  }
+  .btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em;
+    padding: 12px 28px; border-radius: 2px; cursor: pointer;
+    text-decoration: none; transition: all 0.2s; display: inline-block;
+  }
+  .btn-primary { background: var(--accent); color: #f2ece8; font-weight: 500; }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-ghost { border: 1px solid var(--border-accent); color: var(--accent); background: transparent; }
+  .btn-ghost:hover { background: rgba(120,20,35,0.08); }
+
+  .hero-stats {
+    margin-top: 80px; display: flex; gap: 48px;
+    border-top: 1px solid var(--border); padding-top: 40px;
+    opacity: 0; animation: fadeUp 0.7s 0.65s forwards;
+  }
+  .stat-num { font-size: 38px; font-weight: 400; color: var(--accent); display: block; font-style: italic; }
+  .stat-label { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* ── SECTION LABEL ── */
+  #about { border-top: 1px solid var(--border); }
+  .section-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 48px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .section-label::before { content: '◆'; font-size: 7px; opacity: 0.6; flex-shrink: 0; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border-accent), transparent); }
+
+  /* ── ABOUT ── */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .about-text p { font-size: 18px; color: var(--muted); line-height: 1.9; margin-bottom: 20px; font-style: italic; }
+  .about-text p strong { color: var(--text); font-family: var(--mono); font-size: 14px; font-style: normal; font-weight: 500; }
+  .about-details { display: flex; flex-direction: column; }
+  .detail-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 14px 0; border-bottom: 1px solid var(--border); font-family: var(--mono);
+  }
+  .detail-key { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; }
+  .detail-val { font-size: 12px; color: var(--text); text-align: right; }
+
+  /* ── WORKS GRID ── */
+  #works { border-top: 1px solid var(--border); }
+  .works-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1px; background: var(--border); border: 1px solid var(--border);
+  }
+  .work-card {
+    background: var(--bg); cursor: pointer; position: relative; overflow: hidden;
+    transition: background 0.2s;
+  }
+  .work-card:hover { background: var(--bg2); }
+  .work-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: var(--accent);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+  }
+  .work-card:hover::before { transform: scaleX(1); }
+  .work-thumb { width: 100%; height: 220px; display: block; overflow: hidden; }
+  .work-thumb svg { width: 100%; height: 100%; display: block; }
+  .card-body { padding: 24px 28px 28px; }
+  .work-num {
+    font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.14em;
+    margin-bottom: 12px; display: inline-flex; align-items: center; gap: 8px; opacity: 0.7;
+  }
+  .work-num::before { content: ''; display: inline-block; width: 14px; height: 1px; background: var(--accent); opacity: 0.5; }
+  .work-title { font-size: 20px; font-weight: 400; color: var(--text); margin-bottom: 10px; line-height: 1.2; }
+  .work-desc { font-family: var(--mono); font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 18px; font-style: normal; }
+  .work-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .work-tag {
+    font-family: var(--mono); font-size: 10px; padding: 3px 9px; letter-spacing: 0.08em;
+    border: 1px solid var(--border-accent); color: var(--accent);
+    border-radius: 2px; text-transform: uppercase;
+  }
+  .work-open-hint {
+    font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em;
+    margin-top: 16px; opacity: 0; transition: opacity 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .work-open-hint::before { content: '↗'; font-size: 13px; }
+  .work-card:hover .work-open-hint { opacity: 1; }
+
+  /* ── TOOLS / SKILLS ── */
+  #tools { border-top: 1px solid var(--border); }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; }
+  .skill-group-title {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  .skill-list { display: flex; flex-direction: column; gap: 8px; }
+  .skill-item {
+    font-family: var(--mono); font-size: 12px; color: var(--muted); padding: 10px 14px;
+    border: 1px solid var(--border); border-radius: 2px;
+    transition: all 0.15s; display: flex; align-items: center; gap: 10px;
+  }
+  .skill-item:hover { border-color: var(--border-accent); color: var(--text); }
+  .skill-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+  /* ── CONTACT ── */
+  #contact { border-top: 1px solid var(--border); }
+  .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .contact-heading { font-size: clamp(32px, 5vw, 60px); font-weight: 400; line-height: 1.05; color: var(--text); margin-bottom: 20px; }
+  .contact-heading em { color: var(--accent); font-style: italic; }
+  .contact-sub { font-size: 16px; color: var(--muted); line-height: 1.7; font-style: italic; }
+  .contact-links { display: flex; flex-direction: column; gap: 12px; }
+  .contact-link {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px; border: 1px solid var(--border);
+    text-decoration: none; transition: all 0.2s; border-radius: 2px;
+  }
+  .contact-link:hover { border-color: var(--border-accent); background: rgba(120,20,35,0.04); }
+  .cl-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+  .cl-val { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+  .cl-arrow { color: var(--muted); font-size: 18px; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px; display: flex; justify-content: space-between; align-items: center;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .footer-copy { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .footer-back { font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; letter-spacing: 0.06em; transition: color 0.2s; }
+  .footer-back:hover { color: var(--accent); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(30,14,16,0.88); backdrop-filter: blur(10px);
+    display: flex; align-items: flex-start; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    overflow-y: auto; padding: 60px 24px;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--bg2); border: 1px solid var(--border-accent);
+    border-radius: 3px; width: 100%; max-width: 800px;
+    position: relative; overflow: hidden;
+    transform: translateY(32px); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-close {
+    position: absolute; top: 16px; right: 16px; z-index: 10;
+    background: rgba(242,236,232,0.8); border: 1px solid var(--border); color: var(--muted);
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em;
+    padding: 6px 14px; border-radius: 2px; cursor: pointer; transition: all 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .modal-close:hover { border-color: var(--border-accent); color: var(--accent); }
+
+  /* Full-width artwork preview in modal */
+  .modal-artwork { width: 100%; height: 300px; display: block; overflow: hidden; }
+  .modal-artwork svg { width: 100%; height: 100%; display: block; }
+
+  .modal-body { padding: 40px 48px 48px; }
+  .modal-num { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.14em; margin-bottom: 14px; opacity: 0.7; }
+  .modal-title { font-size: clamp(26px, 4vw, 44px); font-weight: 400; color: var(--text); line-height: 1.1; margin-bottom: 8px; }
+  .modal-subtitle { font-size: 16px; color: var(--muted); font-style: italic; margin-bottom: 28px; line-height: 1.5; }
+  .modal-divider { height: 1px; background: var(--border); margin-bottom: 28px; }
+  .modal-section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; opacity: 0.8; }
+  .modal-desc { font-size: 16px; color: var(--muted); line-height: 1.9; margin-bottom: 32px; font-style: italic; }
+  .modal-details-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border: 1px solid var(--border); margin-bottom: 32px;
+  }
+  .modal-detail { padding: 13px 18px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+  .modal-detail:nth-child(even) { border-right: none; }
+  .modal-detail:nth-last-child(-n+2) { border-bottom: none; }
+  .modal-detail-key { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  .modal-detail-val { font-family: var(--mono); font-size: 12px; color: var(--text); }
+  .modal-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .modal-tag { font-family: var(--mono); font-size: 10px; padding: 4px 11px; letter-spacing: 0.08em; border: 1px solid var(--border-accent); color: var(--accent); border-radius: 2px; text-transform: uppercase; }
+  .modal-actions { display: flex; gap: 12px; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s, transform 0.6s; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    section { padding: 80px 24px; }
+    .about-grid, .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+    .hero-stats { gap: 32px; }
+    footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
+    .nav-links { display: none; }
+    .modal-body { padding: 28px 24px 36px; }
+    .modal-details-grid { grid-template-columns: 1fr; }
+    .modal-detail { border-right: none; }
+    .modal-detail:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); }
+    .modal-detail:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">Owen Li</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li class="nav-dropdown" id="navDropdown">
+      <button class="nav-dropdown-btn" id="navDropdownBtn" aria-haspopup="true" aria-expanded="false">
+        More <span class="nav-dropdown-chevron"></span>
+      </button>
+      <div class="nav-dropdown-menu" role="menu">
+        <a href="index.html" role="menuitem">Engineering <span>↗</span></a>
+        <a href="owen-li-photography.html" role="menuitem">Photography <span>↗</span></a>
+        <a href="owen-li-blog.html" role="menuitem">Writing <span>↗</span></a>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-label">Art & Graphic Design</div>
+  <h1 class="hero-name">Owen<br><em>Li.</em></h1>
+  <p class="hero-tagline">Visual work made at the boundary between engineering rigour and aesthetic intuition.</p>
+  <div class="hero-cta">
+    <a href="#works" class="btn btn-primary">View Works</a>
+    <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+  </div>
+  <div class="hero-stats">
+    <div><span class="stat-num">6</span><span class="stat-label">Works</span></div>
+    <div><span class="stat-num">Print</span><span class="stat-label">& Digital</span></div>
+    <div><span class="stat-num">2D / 3D</span><span class="stat-label">Media</span></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label reveal">About</div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Design, for me, is where engineering and art negotiate. I'm drawn to <strong>systematic visual thinking</strong> — grids, type hierarchies, geometric abstraction — and equally to the moments where the system breaks down and something unexpected happens.</p>
+      <p>Most of my graphic work is <strong>print-originated</strong>: posters, data visualisations, identity work for small projects. I find the constraint of a fixed page more interesting than the infinite canvas of a screen.</p>
+      <p>The tools change but the question stays the same: what's the clearest possible way to say this?</p>
+    </div>
+    <div class="about-details reveal">
+      <div class="detail-row"><span class="detail-key">Discipline</span><span class="detail-val">Graphic Design, Illustration</span></div>
+      <div class="detail-row"><span class="detail-key">Focus</span><span class="detail-val">Print, Poster, Data Viz</span></div>
+      <div class="detail-row"><span class="detail-key">Influences</span><span class="detail-val">Bauhaus, Swiss, Saul Bass</span></div>
+      <div class="detail-row"><span class="detail-key">Software</span><span class="detail-val">Illustrator, Figma, Blender</span></div>
+      <div class="detail-row"><span class="detail-key">Commissions</span><span class="detail-val" style="color:var(--accent)">Open — enquire below</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section id="works">
+  <div class="section-label reveal">Works</div>
+  <div class="works-grid">
+
+    <!-- 01 -->
+    <div class="work-card reveal" data-work="0">
+      <div class="work-thumb">
+        <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="220" fill="#f2ece8"/>
+          <!-- Bauhaus-style geometric poster -->
+          <circle cx="200" cy="110" r="90" fill="none" stroke="#7c1828" stroke-width="1.5" opacity="0.9"/>
+          <circle cx="200" cy="110" r="60" fill="#7c1828" opacity="0.12"/>
+          <rect x="110" y="20" width="2" height="180" fill="#7c1828" opacity="0.5"/>
+          <rect x="288" y="20" width="2" height="180" fill="#7c1828" opacity="0.5"/>
+          <rect x="50" y="108" width="300" height="2" fill="#7c1828" opacity="0.5"/>
+          <line x1="110" y1="20" x2="288" y2="200" stroke="#a83040" stroke-width="0.8" opacity="0.25"/>
+          <line x1="288" y1="20" x2="110" y2="200" stroke="#a83040" stroke-width="0.8" opacity="0.25"/>
+          <circle cx="200" cy="110" r="12" fill="#7c1828" opacity="0.8"/>
+          <text x="200" y="208" text-anchor="middle" fill="#7a5a5e" font-size="9" font-family="monospace" opacity="0.6">Geometric Poster Series</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="work-num">01 / Work</span>
+        <div class="work-title">Axis & Orbit</div>
+        <p class="work-desc">A poster series exploring Bauhaus geometric principles applied to aerospace iconography.</p>
+        <div class="work-tags">
+          <span class="work-tag">Poster</span>
+          <span class="work-tag">Print</span>
+          <span class="work-tag">Geometric</span>
+        </div>
+        <div class="work-open-hint">View work</div>
+      </div>
+    </div>
+
+    <!-- 02 -->
+    <div class="work-card reveal" data-work="1">
+      <div class="work-thumb">
+        <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="220" fill="#ebe3de"/>
+          <!-- Data viz / infographic aesthetic -->
+          <line x1="50" y1="180" x2="360" y2="180" stroke="#8a7a78" stroke-width="0.8" opacity="0.4"/>
+          <line x1="50" y1="180" x2="50" y2="30" stroke="#8a7a78" stroke-width="0.8" opacity="0.4"/>
+          <!-- Bars -->
+          <rect x="70"  y="100" width="30" height="80" fill="#7c1828" opacity="0.7"/>
+          <rect x="120" y="60"  width="30" height="120" fill="#7c1828" opacity="0.85"/>
+          <rect x="170" y="80"  width="30" height="100" fill="#7c1828" opacity="0.6"/>
+          <rect x="220" y="40"  width="30" height="140" fill="#7c1828" opacity="0.95"/>
+          <rect x="270" y="70"  width="30" height="110" fill="#7c1828" opacity="0.75"/>
+          <rect x="320" y="90"  width="30" height="90"  fill="#7c1828" opacity="0.65"/>
+          <!-- Overlay line -->
+          <polyline points="85,100 135,60 185,80 235,40 285,70 335,90" fill="none" stroke="#a83040" stroke-width="1.5" opacity="0.6"/>
+          <text x="200" y="212" text-anchor="middle" fill="#7a5a5e" font-size="9" font-family="monospace" opacity="0.6">Data Visualisation</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="work-num">02 / Work</span>
+        <div class="work-title">Signal to Noise</div>
+        <p class="work-desc">Data visualisations of aerodynamic test results — where engineering output becomes graphic language.</p>
+        <div class="work-tags">
+          <span class="work-tag">Data Viz</span>
+          <span class="work-tag">Digital</span>
+          <span class="work-tag">Infographic</span>
+        </div>
+        <div class="work-open-hint">View work</div>
+      </div>
+    </div>
+
+    <!-- 03 -->
+    <div class="work-card reveal" data-work="2">
+      <div class="work-thumb">
+        <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="220" fill="#f2ece8"/>
+          <!-- Isometric 3D form -->
+          <g transform="translate(200,30)">
+            <!-- Top face -->
+            <polygon points="0,-30 80,10 0,50 -80,10" fill="#7c1828" opacity="0.2" stroke="#7c1828" stroke-width="0.8"/>
+            <!-- Right face -->
+            <polygon points="80,10 80,95 0,135 0,50" fill="#7c1828" opacity="0.1" stroke="#7c1828" stroke-width="0.8"/>
+            <!-- Left face -->
+            <polygon points="-80,10 -80,95 0,135 0,50" fill="#7c1828" opacity="0.15" stroke="#7c1828" stroke-width="0.8"/>
+            <!-- Inner top face smaller -->
+            <polygon points="0,-10 50,16 0,42 -50,16" fill="#7c1828" opacity="0.3" stroke="#a83040" stroke-width="0.6"/>
+            <!-- Vertical edges -->
+            <line x1="80" y1="10" x2="80" y2="95" stroke="#7c1828" stroke-width="0.8" opacity="0.5"/>
+            <line x1="-80" y1="10" x2="-80" y2="95" stroke="#7c1828" stroke-width="0.8" opacity="0.5"/>
+            <line x1="0" y1="50" x2="0" y2="135" stroke="#7c1828" stroke-width="0.8" opacity="0.5"/>
+          </g>
+          <text x="200" y="212" text-anchor="middle" fill="#7a5a5e" font-size="9" font-family="monospace" opacity="0.6">3D Illustration</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="work-num">03 / Work</span>
+        <div class="work-title">Solid State</div>
+        <p class="work-desc">Isometric and 3D-rendered illustrations of mechanical components — technical drawings made into art objects.</p>
+        <div class="work-tags">
+          <span class="work-tag">3D Render</span>
+          <span class="work-tag">Illustration</span>
+          <span class="work-tag">Blender</span>
+        </div>
+        <div class="work-open-hint">View work</div>
+      </div>
+    </div>
+
+    <!-- 04 -->
+    <div class="work-card reveal" data-work="3">
+      <div class="work-thumb">
+        <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="220" fill="#ebe3de"/>
+          <!-- Swiss-style type layout -->
+          <rect x="40" y="35" width="200" height="4" rx="2" fill="#1e0e10" opacity="0.9"/>
+          <rect x="40" y="48" width="140" height="4" rx="2" fill="#1e0e10" opacity="0.7"/>
+          <rect x="40" y="65" width="3" height="100" fill="#7c1828" opacity="0.9"/>
+          <rect x="56" y="70" width="180" height="3" rx="1.5" fill="#7a5a5e" opacity="0.4"/>
+          <rect x="56" y="82" width="200" height="3" rx="1.5" fill="#7a5a5e" opacity="0.4"/>
+          <rect x="56" y="94" width="160" height="3" rx="1.5" fill="#7a5a5e" opacity="0.4"/>
+          <rect x="56" y="106" width="190" height="3" rx="1.5" fill="#7a5a5e" opacity="0.4"/>
+          <rect x="56" y="118" width="170" height="3" rx="1.5" fill="#7a5a5e" opacity="0.4"/>
+          <!-- Right column image block -->
+          <rect x="280" y="35" width="80" height="100" fill="#7c1828" opacity="0.15" stroke="#7c1828" stroke-width="0.8"/>
+          <line x1="280" y1="35" x2="360" y2="135" stroke="#7c1828" stroke-width="0.6" opacity="0.3"/>
+          <line x1="360" y1="35" x2="280" y2="135" stroke="#7c1828" stroke-width="0.6" opacity="0.3"/>
+          <rect x="40" y="155" width="310" height="1" fill="#7c1828" opacity="0.3"/>
+          <rect x="40" y="165" width="80" height="3" rx="1.5" fill="#7a5a5e" opacity="0.3"/>
+          <rect x="200" y="165" width="150" height="3" rx="1.5" fill="#7a5a5e" opacity="0.3"/>
+          <text x="200" y="212" text-anchor="middle" fill="#7a5a5e" font-size="9" font-family="monospace" opacity="0.6">Editorial Design</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="work-num">04 / Work</span>
+        <div class="work-title">The Grid Holds</div>
+        <p class="work-desc">Editorial layouts applying Swiss International Typographic Style to technical subject matter — journals, zines, reports.</p>
+        <div class="work-tags">
+          <span class="work-tag">Editorial</span>
+          <span class="work-tag">Typography</span>
+          <span class="work-tag">Print</span>
+        </div>
+        <div class="work-open-hint">View work</div>
+      </div>
+    </div>
+
+    <!-- 05 -->
+    <div class="work-card reveal" data-work="4">
+      <div class="work-thumb">
+        <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="220" fill="#f2ece8"/>
+          <!-- Identity / logo mark -->
+          <g transform="translate(200,110)">
+            <!-- Outer hex -->
+            <polygon points="0,-75 65,-37.5 65,37.5 0,75 -65,37.5 -65,-37.5" fill="none" stroke="#7c1828" stroke-width="1.2" opacity="0.7"/>
+            <!-- Inner forms -->
+            <polygon points="0,-45 39,-22.5 39,22.5 0,45 -39,22.5 -39,-22.5" fill="#7c1828" opacity="0.08" stroke="#7c1828" stroke-width="0.8"/>
+            <!-- Central mark -->
+            <line x1="-65" y1="0" x2="65" y2="0" stroke="#7c1828" stroke-width="0.6" opacity="0.4"/>
+            <line x1="0" y1="-75" x2="0" y2="75" stroke="#7c1828" stroke-width="0.6" opacity="0.4"/>
+            <circle cx="0" cy="0" r="18" fill="#7c1828" opacity="0.6"/>
+            <circle cx="0" cy="0" r="8" fill="#f2ece8"/>
+          </g>
+          <text x="200" y="212" text-anchor="middle" fill="#7a5a5e" font-size="9" font-family="monospace" opacity="0.6">Identity Design</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="work-num">05 / Work</span>
+        <div class="work-title">Mark Making</div>
+        <p class="work-desc">Identity and logo systems for engineering-adjacent organisations — where marks need to carry both technical credibility and visual weight.</p>
+        <div class="work-tags">
+          <span class="work-tag">Identity</span>
+          <span class="work-tag">Logo</span>
+          <span class="work-tag">Branding</span>
+        </div>
+        <div class="work-open-hint">View work</div>
+      </div>
+    </div>
+
+    <!-- 06 -->
+    <div class="work-card reveal" data-work="5">
+      <div class="work-thumb">
+        <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="220" fill="#ebe3de"/>
+          <!-- Placeholder -->
+          <rect x="120" y="40" width="160" height="120" fill="none" stroke="#7c1828" stroke-width="0.8" stroke-dasharray="5 4" opacity="0.3"/>
+          <line x1="120" y1="40" x2="280" y2="160" stroke="#7c1828" stroke-width="0.5" opacity="0.2"/>
+          <line x1="280" y1="40" x2="120" y2="160" stroke="#7c1828" stroke-width="0.5" opacity="0.2"/>
+          <text x="200" y="107" text-anchor="middle" fill="#7a5a5e" font-size="11" font-family="monospace" opacity="0.4">Add your work</text>
+          <text x="200" y="212" text-anchor="middle" fill="#7a5a5e" font-size="9" font-family="monospace" opacity="0.6">Placeholder</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <span class="work-num">06 / Work</span>
+        <div class="work-title">Add Your Work Here</div>
+        <p class="work-desc">Replace this with your own piece. Describe the brief, your approach, and what you were exploring.</p>
+        <div class="work-tags">
+          <span class="work-tag">Medium</span>
+          <span class="work-tag">Type</span>
+        </div>
+        <div class="work-open-hint">View work</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="section-label reveal">Tools & Influences</div>
+  <div class="skills-grid">
+    <div class="reveal">
+      <div class="skill-group-title">Software</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-dot"></span>Adobe Illustrator</div>
+        <div class="skill-item"><span class="skill-dot"></span>Adobe InDesign</div>
+        <div class="skill-item"><span class="skill-dot"></span>Figma</div>
+        <div class="skill-item"><span class="skill-dot"></span>Blender (3D / render)</div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="skill-group-title">Print & Physical</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-dot"></span>Risograph printing</div>
+        <div class="skill-item"><span class="skill-dot"></span>Screen printing</div>
+        <div class="skill-item"><span class="skill-dot"></span>Letterpress (occasional)</div>
+        <div class="skill-item"><span class="skill-dot"></span>Bookbinding</div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="skill-group-title">Influences</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-dot"></span>Saul Bass</div>
+        <div class="skill-item"><span class="skill-dot"></span>Josef Müller-Brockmann</div>
+        <div class="skill-item"><span class="skill-dot"></span>Otl Aicher</div>
+        <div class="skill-item"><span class="skill-dot"></span>Edward Tufte</div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="skill-group-title">Disciplines</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-dot"></span>Poster & editorial design</div>
+        <div class="skill-item"><span class="skill-dot"></span>Data visualisation</div>
+        <div class="skill-item"><span class="skill-dot"></span>Identity & mark-making</div>
+        <div class="skill-item"><span class="skill-dot"></span>Technical illustration</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label reveal">Contact</div>
+  <div class="contact-inner">
+    <div class="reveal">
+      <h2 class="contact-heading">Let's<br><em>make something.</em></h2>
+      <p class="contact-sub">Open to commissions, collaborations, and conversations about design problems worth solving.</p>
+    </div>
+    <div class="contact-links reveal">
+      <a href="mailto:owen.li@email.com" class="contact-link">
+        <div><div class="cl-label">Email</div><div class="cl-val">owen.li@email.com</div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="https://www.are.na/owenli" target="_blank" class="contact-link">
+        <div><div class="cl-label">Are.na</div><div class="cl-val">are.na/owenli</div></div>
+        <span class="cl-arrow">↗</span>
+      </a>
+      <a href="https://instagram.com/owenli" target="_blank" class="contact-link">
+        <div><div class="cl-label">Instagram</div><div class="cl-val">@owenli</div></div>
+        <span class="cl-arrow">→</span>
+      </a>
+      <a href="#" class="contact-link">
+        <div><div class="cl-label">Commission</div><div class="cl-val">Enquire about a project →</div></div>
+        <span class="cl-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">© 2026 Owen Li. All rights reserved.</span>
+  <a href="#hero" class="footer-back">Back to top ↑</a>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" id="modalBox">
+    <button class="modal-close" id="modalClose">ESC / Close</button>
+    <div class="modal-artwork" id="modalArtwork"></div>
+    <div class="modal-body">
+      <div class="modal-num" id="modalNum"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-subtitle" id="modalSubtitle"></div>
+      <div class="modal-divider"></div>
+      <div class="modal-section-label">About this work</div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-section-label">Details</div>
+      <div class="modal-details-grid" id="modalDetails"></div>
+      <div class="modal-section-label">Media & Methods</div>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-actions">
+        <a href="#" class="btn btn-ghost" id="modalPrev">← Prev</a>
+        <a href="#" class="btn btn-ghost" id="modalNext">Next →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const works = [
+  {
+    num: '01 / Work',
+    title: 'Axis & Orbit',
+    subtitle: 'A Bauhaus geometric poster series on aerospace iconography.',
+    artwork: `<svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="300" fill="#f2ece8"/><circle cx="400" cy="150" r="130" fill="none" stroke="#7c1828" stroke-width="2" opacity="0.9"/><circle cx="400" cy="150" r="88" fill="#7c1828" opacity="0.1"/><rect x="222" y="20" width="2.5" height="260" fill="#7c1828" opacity="0.5"/><rect x="576" y="20" width="2.5" height="260" fill="#7c1828" opacity="0.5"/><rect x="80" y="148" width="640" height="2.5" fill="#7c1828" opacity="0.5"/><line x1="222" y1="20" x2="576" y2="280" stroke="#a83040" stroke-width="1" opacity="0.2"/><line x1="576" y1="20" x2="222" y2="280" stroke="#a83040" stroke-width="1" opacity="0.2"/><circle cx="400" cy="150" r="18" fill="#7c1828" opacity="0.85"/></svg>`,
+    desc: 'A seven-piece poster series applying Bauhaus geometric vocabulary to spacecraft forms and orbital mechanics. Each poster distils a concept — re-entry, orbital decay, staging — into a single geometric statement. Designed for A2 risograph print in two colours.',
+    details: [
+      { key: 'Medium', val: 'Risograph, 2 colour' },
+      { key: 'Format', val: 'A2 poster, edition of 30' },
+      { key: 'Year', val: '2025' },
+      { key: 'Status', val: 'Prints available' },
+    ],
+    tags: ['Poster', 'Risograph', 'Geometric', 'Bauhaus', 'Aerospace']
+  },
+  {
+    num: '02 / Work',
+    title: 'Signal to Noise',
+    subtitle: 'Engineering data rendered as graphic language.',
+    artwork: `<svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="300" fill="#ebe3de"/><line x1="80" y1="255" x2="730" y2="255" stroke="#8a7a78" stroke-width="1" opacity="0.4"/><line x1="80" y1="255" x2="80" y2="30" stroke="#8a7a78" stroke-width="1" opacity="0.4"/><rect x="110" y="140" width="55" height="115" fill="#7c1828" opacity="0.6"/><rect x="200" y="80" width="55" height="175" fill="#7c1828" opacity="0.8"/><rect x="290" y="110" width="55" height="145" fill="#7c1828" opacity="0.55"/><rect x="380" y="50" width="55" height="205" fill="#7c1828" opacity="0.95"/><rect x="470" y="95" width="55" height="160" fill="#7c1828" opacity="0.7"/><rect x="560" y="125" width="55" height="130" fill="#7c1828" opacity="0.6"/><rect x="650" y="145" width="55" height="110" fill="#7c1828" opacity="0.5"/><polyline points="137,140 227,80 317,110 407,50 497,95 587,125 677,145" fill="none" stroke="#a83040" stroke-width="2" opacity="0.7"/></svg>`,
+    desc: 'A series of visualisations translating wind-tunnel test data and CFD output into publishable graphics. The goal was to make the data legible to a non-specialist audience without stripping out its complexity. Built in Illustrator from exported CSV files, with Python scripts for the initial data transformation.',
+    details: [
+      { key: 'Medium', val: 'Digital, print-ready PDF' },
+      { key: 'Tools', val: 'Illustrator, Python' },
+      { key: 'Year', val: '2024–25' },
+      { key: 'Context', val: 'Research publication' },
+    ],
+    tags: ['Data Viz', 'Infographic', 'Digital', 'Python', 'Illustrator']
+  },
+  {
+    num: '03 / Work',
+    title: 'Solid State',
+    subtitle: 'Technical components as sculptural objects.',
+    artwork: `<svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="300" fill="#f2ece8"/><g transform="translate(400,30)"><polygon points="0,-50 130,20 0,90 -130,20" fill="#7c1828" opacity="0.15" stroke="#7c1828" stroke-width="1.2"/><polygon points="130,20 130,160 0,230 0,90" fill="#7c1828" opacity="0.08" stroke="#7c1828" stroke-width="1.2"/><polygon points="-130,20 -130,160 0,230 0,90" fill="#7c1828" opacity="0.12" stroke="#7c1828" stroke-width="1.2"/><polygon points="0,-20 80,12 0,44 -80,12" fill="#7c1828" opacity="0.3" stroke="#a83040" stroke-width="0.8"/><line x1="130" y1="20" x2="130" y2="160" stroke="#7c1828" stroke-width="1" opacity="0.4"/><line x1="-130" y1="20" x2="-130" y2="160" stroke="#7c1828" stroke-width="1" opacity="0.4"/><line x1="0" y1="90" x2="0" y2="230" stroke="#7c1828" stroke-width="1" opacity="0.4"/></g></svg>`,
+    desc: 'Blender-rendered isometric illustrations of precision-machined components — turbine blades, bearing housings, fastener assemblies. Each object is lit and framed as a gallery piece rather than a technical drawing. The series has been used as section openers in a lab publication.',
+    details: [
+      { key: 'Medium', val: 'Blender 3D render' },
+      { key: 'Output', val: 'Print & digital' },
+      { key: 'Year', val: '2024' },
+      { key: 'Context', val: 'Lab publication, personal' },
+    ],
+    tags: ['3D Render', 'Blender', 'Illustration', 'Technical', 'Isometric']
+  },
+  {
+    num: '04 / Work',
+    title: 'The Grid Holds',
+    subtitle: 'Swiss-style editorial design applied to technical writing.',
+    artwork: `<svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="300" fill="#ebe3de"/><rect x="70" y="45" width="340" height="6" rx="3" fill="#1e0e10" opacity="0.9"/><rect x="70" y="62" width="220" height="6" rx="3" fill="#1e0e10" opacity="0.7"/><rect x="70" y="85" width="5" height="155" fill="#7c1828" opacity="0.9"/><rect x="88" y="92" width="290" height="4" rx="2" fill="#7a5a5e" opacity="0.35"/><rect x="88" y="105" width="320" height="4" rx="2" fill="#7a5a5e" opacity="0.35"/><rect x="88" y="118" width="270" height="4" rx="2" fill="#7a5a5e" opacity="0.35"/><rect x="88" y="131" width="300" height="4" rx="2" fill="#7a5a5e" opacity="0.35"/><rect x="88" y="144" width="260" height="4" rx="2" fill="#7a5a5e" opacity="0.35"/><rect x="88" y="170" width="290" height="4" rx="2" fill="#7a5a5e" opacity="0.25"/><rect x="88" y="183" width="310" height="4" rx="2" fill="#7a5a5e" opacity="0.25"/><rect x="88" y="196" width="280" height="4" rx="2" fill="#7a5a5e" opacity="0.25"/><rect x="460" y="45" width="280" height="165" fill="#7c1828" opacity="0.1" stroke="#7c1828" stroke-width="0.8"/><line x1="460" y1="45" x2="740" y2="210" stroke="#7c1828" stroke-width="0.7" opacity="0.25"/><line x1="740" y1="45" x2="460" y2="210" stroke="#7c1828" stroke-width="0.7" opacity="0.25"/><rect x="70" y="240" width="660" height="1.5" fill="#7c1828" opacity="0.3"/><rect x="70" y="255" width="120" height="4" rx="2" fill="#7a5a5e" opacity="0.3"/><rect x="560" y="255" width="170" height="4" rx="2" fill="#7a5a5e" opacity="0.3"/></svg>`,
+    desc: 'A series of layouts for technical journals and self-published zines using a strict Müller-Brockmann grid. The constraint: every piece of content — text, figure, caption, folio — must land on a grid intersection. Breaking the grid is only permitted when it is the point of the design.',
+    details: [
+      { key: 'Medium', val: 'InDesign, print PDF' },
+      { key: 'Format', val: 'A5 / A4 zine, journal' },
+      { key: 'Year', val: '2023–25' },
+      { key: 'Copies', val: 'Self-published, small run' },
+    ],
+    tags: ['Editorial', 'Typography', 'Grid', 'InDesign', 'Print', 'Swiss']
+  },
+  {
+    num: '05 / Work',
+    title: 'Mark Making',
+    subtitle: 'Identity systems for engineering-adjacent organisations.',
+    artwork: `<svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="300" fill="#f2ece8"/><g transform="translate(400,150)"><polygon points="0,-110 95,-55 95,55 0,110 -95,55 -95,-55" fill="none" stroke="#7c1828" stroke-width="1.8" opacity="0.7"/><polygon points="0,-66 57,-33 57,33 0,66 -57,33 -57,-33" fill="#7c1828" opacity="0.08" stroke="#7c1828" stroke-width="1"/><line x1="-95" y1="0" x2="95" y2="0" stroke="#7c1828" stroke-width="0.8" opacity="0.3"/><line x1="0" y1="-110" x2="0" y2="110" stroke="#7c1828" stroke-width="0.8" opacity="0.3"/><line x1="-82" y1="-55" x2="82" y2="55" stroke="#7c1828" stroke-width="0.5" opacity="0.2"/><line x1="82" y1="-55" x2="-82" y2="55" stroke="#7c1828" stroke-width="0.5" opacity="0.2"/><circle cx="0" cy="0" r="26" fill="#7c1828" opacity="0.65"/><circle cx="0" cy="0" r="12" fill="#f2ece8"/><circle cx="0" cy="0" r="5" fill="#7c1828"/></g></svg>`,
+    desc: 'Identity work for a student rocketry team, a materials research lab, and a science communication non-profit. Each mark had to work at lapel-pin scale and banner scale simultaneously — a constraint that rules out most solutions quickly. The hexagonal system shown here serves as a modular identity for the rocketry team.',
+    details: [
+      { key: 'Medium', val: 'Vector (Illustrator)' },
+      { key: 'Deliverables', val: 'Logo, guidelines, files' },
+      { key: 'Year', val: '2022–25' },
+      { key: 'Clients', val: '3 organisations' },
+    ],
+    tags: ['Identity', 'Logo', 'Branding', 'Illustrator', 'Vector', 'System']
+  },
+  {
+    num: '06 / Work',
+    title: 'Add Your Work Here',
+    subtitle: 'Replace this with your own piece.',
+    artwork: `<svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="300" fill="#ebe3de"/><rect x="240" y="60" width="320" height="180" fill="none" stroke="#7c1828" stroke-width="1" stroke-dasharray="6 4" opacity="0.25"/><text x="400" y="155" text-anchor="middle" fill="#7a5a5e" font-size="14" font-family="monospace" opacity="0.4">Your work here</text></svg>`,
+    desc: 'Replace this with your own work description. Explain the brief, the constraints you were working within, the decisions you made, and what you learned from it.',
+    details: [
+      { key: 'Medium', val: 'Your medium' },
+      { key: 'Format', val: 'Your format' },
+      { key: 'Year', val: 'Your year' },
+      { key: 'Status', val: 'Your status' },
+    ],
+    tags: ['Medium', 'Discipline']
+  }
+];
+
+let current = 0;
+
+function openModal(idx) {
+  current = idx;
+  const w = works[idx];
+  document.getElementById('modalArtwork').innerHTML = w.artwork;
+  document.getElementById('modalNum').textContent = w.num;
+  document.getElementById('modalTitle').textContent = w.title;
+  document.getElementById('modalSubtitle').textContent = w.subtitle;
+  document.getElementById('modalDesc').textContent = w.desc;
+  document.getElementById('modalDetails').innerHTML = w.details
+    .map(d => `<div class="modal-detail"><div class="modal-detail-key">${d.key}</div><div class="modal-detail-val">${d.val}</div></div>`)
+    .join('');
+  document.getElementById('modalTags').innerHTML = w.tags
+    .map(t => `<span class="modal-tag">${t}</span>`).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('modalOverlay').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('.work-card').forEach(card => {
+  card.addEventListener('click', () => openModal(parseInt(card.dataset.work)));
+});
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+document.getElementById('modalPrev').addEventListener('click', e => {
+  e.preventDefault();
+  openModal((current - 1 + works.length) % works.length);
+});
+document.getElementById('modalNext').addEventListener('click', e => {
+  e.preventDefault();
+  openModal((current + 1) % works.length);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if (document.getElementById('modalOverlay').classList.contains('open')) {
+    if (e.key === 'ArrowRight') openModal((current + 1) % works.length);
+    if (e.key === 'ArrowLeft') openModal((current - 1 + works.length) % works.length);
+  }
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Dropdown
+const dd = document.getElementById('navDropdown');
+const btn = document.getElementById('navDropdownBtn');
+btn.addEventListener('click', e => {
+  e.stopPropagation();
+  const isOpen = dd.classList.toggle('open');
+  btn.setAttribute('aria-expanded', isOpen);
+});
+document.addEventListener('click', () => {
+  dd.classList.remove('open');
+  btn.setAttribute('aria-expanded', false);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    dd.classList.remove('open');
+    btn.setAttribute('aria-expanded', false);
+  }
+});
+</script>
+</body>
+</html>

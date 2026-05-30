@@ -9,15 +9,15 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #0d0f12;
-    --bg2: #13161b;
-    --bg3: #1a1e25;
-    --border: rgba(255,255,255,0.08);
-    --border-accent: rgba(100,180,255,0.3);
-    --text: #e8eaed;
-    --muted: #7a8494;
-    --accent: #64b4ff;
-    --accent2: #a8d4ff;
+    --bg: #f0f4fa;
+    --bg2: #e6ecf5;
+    --bg3: #dce4f0;
+    --border: rgba(30,70,140,0.12);
+    --border-accent: rgba(30,90,180,0.35);
+    --text: #0e1c30;
+    --muted: #3a5a7a;
+    --accent: #1a5fa0;
+    --accent2: #2e7ec0;
     --mono: 'IBM Plex Mono', monospace;
     --serif: 'Libre Baskerville', Georgia, serif;
   }
@@ -30,6 +30,11 @@
     font-family: var(--mono);
     line-height: 1.7;
     min-height: 100vh;
+    /* Subtle overall blueprint paper texture */
+    background-image:
+      linear-gradient(rgba(26,95,160,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,95,160,0.07) 1px, transparent 1px);
+    background-size: 80px 80px;
   }
 
   /* ── NAV ── */
@@ -38,7 +43,7 @@
     z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
     padding: 18px 48px;
-    background: rgba(13,15,18,0.85);
+    background: rgba(240,244,250,0.92);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
@@ -59,7 +64,59 @@
     border: 1px solid var(--border-accent); color: var(--accent);
     background: transparent;
   }
-  .nav-switch:hover { background: rgba(100,180,255,0.08); color: var(--accent2); }
+  .nav-switch:hover { background: rgba(26,95,160,0.08); color: var(--accent2); }
+
+  /* ── NAV DROPDOWN ── */
+  .nav-dropdown { position: relative; list-style: none; }
+  .nav-dropdown-btn {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    padding: 8px 16px; border-radius: 3px; cursor: pointer;
+    border: 1px solid var(--border-accent); color: var(--accent);
+    background: transparent; white-space: nowrap;
+    display: flex; align-items: center; gap: 8px;
+    transition: all 0.2s;
+  }
+  .nav-dropdown-btn:hover,
+  .nav-dropdown.open .nav-dropdown-btn {
+    background: rgba(26,95,160,0.08); color: var(--accent2);
+  }
+  .nav-dropdown-chevron {
+    display: inline-block; width: 8px; height: 8px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .nav-dropdown.open .nav-dropdown-chevron {
+    transform: rotate(-135deg) translateY(-2px);
+  }
+  .nav-dropdown-menu {
+    position: absolute; top: calc(100% + 8px); right: 0;
+    background: rgba(240,244,250,0.97);
+    border: 1px solid var(--border-accent);
+    border-radius: 3px; min-width: 160px;
+    overflow: hidden;
+    opacity: 0; pointer-events: none;
+    transform: translateY(-6px);
+    transition: opacity 0.18s, transform 0.18s;
+    backdrop-filter: blur(12px);
+    z-index: 200;
+  }
+  .nav-dropdown.open .nav-dropdown-menu {
+    opacity: 1; pointer-events: all; transform: translateY(0);
+  }
+  .nav-dropdown-menu a {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 16px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    color: var(--muted); text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: all 0.15s;
+  }
+  .nav-dropdown-menu a:last-child { border-bottom: none; }
+  .nav-dropdown-menu a:hover { color: var(--accent); background: rgba(26,95,160,0.06); }
+  .nav-dropdown-menu a span { opacity: 0.5; font-size: 13px; }
 
   /* ── SECTIONS ── */
   section { padding: 120px 48px; max-width: 1100px; margin: 0 auto; }
@@ -75,12 +132,120 @@
 
   .hero-grid-bg {
     position: absolute; inset: 0; pointer-events: none;
+    /* Fine blueprint grid */
     background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
-    opacity: 0.5;
+      linear-gradient(rgba(26,95,160,0.14) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,95,160,0.14) 1px, transparent 1px),
+      linear-gradient(rgba(26,95,160,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,95,160,0.06) 1px, transparent 1px);
+    background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+  }
+
+  /* Engineering drawing overlay — corner marks, dimension lines, title block */
+  .hero-grid-bg::before {
+    content: '';
+    position: absolute; inset: 24px;
+    border: 1px solid rgba(26,95,160,0.25);
+    pointer-events: none;
+  }
+  .hero-grid-bg::after {
+    content: '';
+    position: absolute; inset: 32px;
+    border: 1px solid rgba(26,95,160,0.12);
+    pointer-events: none;
+  }
+
+  /* Corner crosshair marks */
+  .drawing-corners {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .drawing-corners::before,
+  .drawing-corners::after {
+    content: '';
+    position: absolute;
+    width: 24px; height: 24px;
+  }
+
+  .corner-mark {
+    position: absolute; pointer-events: none;
+    width: 20px; height: 20px;
+  }
+  .corner-mark::before,
+  .corner-mark::after {
+    content: ''; position: absolute; background: rgba(26,95,160,0.55);
+  }
+  .corner-mark::before { width: 1px; height: 20px; left: 0; top: 0; }
+  .corner-mark::after  { width: 20px; height: 1px; left: 0; top: 0; }
+  .corner-mark.tl { top: 24px; left: 24px; }
+  .corner-mark.tr { top: 24px; right: 24px; transform: scaleX(-1); }
+  .corner-mark.bl { bottom: 24px; left: 24px; transform: scaleY(-1); }
+  .corner-mark.br { bottom: 24px; right: 24px; transform: scale(-1); }
+
+  /* Dimension tick lines along the border */
+  .dim-line-h {
+    position: absolute; pointer-events: none;
+    top: 24px; left: 24px; right: 24px; height: 0;
+    border-top: 1px solid rgba(26,95,160,0.25);
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .dim-tick {
+    width: 1px; height: 6px; background: rgba(26,95,160,0.4);
+    flex-shrink: 0;
+  }
+
+  /* Title block (bottom-right) */
+  .title-block {
+    position: absolute; bottom: 24px; right: 24px;
+    border: 1px solid rgba(26,95,160,0.28);
+    font-family: var(--mono); pointer-events: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    min-width: 220px;
+  }
+  .tb-cell {
+    padding: 5px 10px; border: 1px solid rgba(26,95,160,0.15);
+    font-size: 9px; color: rgba(26,95,160,0.7); letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .tb-cell.label { color: rgba(26,95,160,0.45); font-size: 8px; }
+  .tb-cell.span2 { grid-column: 1 / -1; }
+  .tb-cell.title-name { font-size: 11px; color: rgba(26,95,160,0.85); font-weight: 600; }
+
+  /* Revision triangle marker */
+  .rev-marker {
+    position: absolute; top: 40px; right: 40px; pointer-events: none;
+    font-family: var(--mono); font-size: 9px; color: rgba(26,95,160,0.55);
+    letter-spacing: 0.1em; display: flex; align-items: center; gap: 6px;
+  }
+  .rev-triangle {
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 10px solid rgba(26,95,160,0.45);
+    display: inline-block;
+  }
+
+  /* Centre crosshair mark */
+  .centre-mark {
+    position: absolute; pointer-events: none;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 32px; height: 32px;
+  }
+  .centre-mark::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; width: 1px; height: 100%;
+    background: rgba(26,95,160,0.2);
+    transform: translateX(-50%);
+  }
+  .centre-mark::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%; height: 1px; width: 100%;
+    background: rgba(26,95,160,0.2);
+    transform: translateY(-50%);
   }
 
   .hero-label {
@@ -112,14 +277,14 @@
     display: inline-block;
   }
   .btn-primary {
-    background: var(--accent); color: #0d0f12; font-weight: 600;
+    background: var(--accent); color: #f0f4fa; font-weight: 600;
   }
   .btn-primary:hover { background: var(--accent2); }
   .btn-ghost {
     border: 1px solid var(--border-accent); color: var(--accent);
     background: transparent;
   }
-  .btn-ghost:hover { background: rgba(100,180,255,0.08); }
+  .btn-ghost:hover { background: rgba(26,95,160,0.08); }
 
   .hero-stats {
     margin-top: 80px; display: flex; gap: 48px;
@@ -138,8 +303,13 @@
     text-transform: uppercase; margin-bottom: 48px;
     display: flex; align-items: center; gap: 16px;
   }
+  .section-label::before {
+    content: '◇';
+    font-size: 8px; color: var(--accent); opacity: 0.5; flex-shrink: 0;
+  }
   .section-label::after {
-    content: ''; flex: 1; height: 1px; background: var(--border);
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--border-accent), transparent);
   }
   .about-grid {
     display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
@@ -170,8 +340,18 @@
     background: var(--bg); padding: 36px 32px;
     transition: background 0.2s; cursor: default;
     position: relative; overflow: hidden;
+    background-image:
+      linear-gradient(rgba(26,95,160,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,95,160,0.07) 1px, transparent 1px);
+    background-size: 32px 32px;
   }
-  .project-card:hover { background: var(--bg2); }
+  .project-card:hover {
+    background-color: var(--bg2);
+    background-image:
+      linear-gradient(rgba(26,95,160,0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,95,160,0.1) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
   .project-card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0;
     height: 2px; background: var(--accent);
@@ -180,8 +360,14 @@
   }
   .project-card:hover::before { transform: scaleX(1); }
   .proj-num {
-    font-size: 11px; color: var(--accent); letter-spacing: 0.12em;
-    margin-bottom: 20px; display: block;
+    font-size: 10px; color: var(--accent); letter-spacing: 0.16em;
+    margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px;
+    opacity: 0.7;
+  }
+  .proj-num::before {
+    content: '';
+    display: inline-block; width: 16px; height: 1px;
+    background: var(--accent); opacity: 0.5;
   }
   .proj-title {
     font-size: 18px; font-weight: 600; color: var(--text);
@@ -237,7 +423,7 @@
     padding: 18px 20px; border: 1px solid var(--border);
     text-decoration: none; transition: all 0.2s; border-radius: 3px;
   }
-  .contact-link:hover { border-color: var(--border-accent); background: rgba(100,180,255,0.04); }
+  .contact-link:hover { border-color: var(--border-accent); background: rgba(26,95,160,0.04); }
   .cl-label { font-size: 11px; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; }
   .cl-val { font-size: 14px; color: var(--accent); }
   .cl-arrow { color: var(--muted); font-size: 18px; }
@@ -268,7 +454,7 @@
 
   .modal-overlay {
     position: fixed; inset: 0; z-index: 200;
-    background: rgba(13,15,18,0.92);
+    background: rgba(14,28,48,0.88);
     backdrop-filter: blur(8px);
     display: flex; align-items: flex-start; justify-content: center;
     opacity: 0; pointer-events: none;
@@ -280,12 +466,16 @@
   .modal {
     background: var(--bg2);
     border: 1px solid var(--border-accent);
-    border-radius: 6px;
+    border-radius: 0;
     width: 100%; max-width: 780px;
     padding: 48px 52px;
     position: relative;
     transform: translateY(32px);
     transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+    background-image:
+      linear-gradient(rgba(26,95,160,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,95,160,0.07) 1px, transparent 1px);
+    background-size: 32px 32px;
   }
   .modal-overlay.open .modal { transform: translateY(0); }
 
@@ -370,16 +560,46 @@
     <li><a href="#projects">Projects</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="photography.html" class="nav-switch">Photography →</a></li>
+    <li class="nav-dropdown" id="navDropdown">
+      <button class="nav-dropdown-btn" id="navDropdownBtn" aria-haspopup="true" aria-expanded="false">
+        More <span class="nav-dropdown-chevron"></span>
+      </button>
+      <div class="nav-dropdown-menu" role="menu">
+        <a href="owen-li-photography.html" role="menuitem">Photography <span>↗</span></a>
+        <a href="owen-li-blog.html" role="menuitem">Writing <span>↗</span></a>
+        <a href="owen-li-art.html" role="menuitem">Art & Design <span>↗</span></a>
+      </div>
+    </li>
   </ul>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
   <div class="hero-grid-bg"></div>
+
+  <!-- Engineering drawing overlay elements -->
+  <div class="drawing-corners">
+    <div class="corner-mark tl"></div>
+    <div class="corner-mark tr"></div>
+    <div class="corner-mark bl"></div>
+    <div class="corner-mark br"></div>
+  </div>
+  <div class="centre-mark"></div>
+  <div class="rev-marker"><span class="rev-triangle"></span>REV A &nbsp;·&nbsp; DWG-2026-OL</div>
+  <div class="title-block">
+    <div class="tb-cell label">Drawn by</div>
+    <div class="tb-cell label">Scale</div>
+    <div class="tb-cell">Owen Li</div>
+    <div class="tb-cell">1:1</div>
+    <div class="tb-cell label">Discipline</div>
+    <div class="tb-cell label">Date</div>
+    <div class="tb-cell">Mech / Aero Eng</div>
+    <div class="tb-cell">2026</div>
+    <div class="tb-cell span2 title-name">Portfolio — Owen Li</div>
+  </div>
   <div class="hero-label">Mechanical & Aerospace Engineer</div>
-  <h1 class="hero-name">Owen<span> Li</span></h1>
-  <p class="hero-tagline">Building machines that endure and dominate in harsh and contested environments - Rooted in first principles from concept to final form.</p>
+  <h1 class="hero-name">Owen<br><span>Li.</span></h1>
+  <p class="hero-tagline">Building things that move, fly, and endure — from first principles to final form.</p>
   <div class="hero-cta">
     <a href="#projects" class="btn btn-primary">View Projects</a>
     <a href="#contact" class="btn btn-ghost">Get in Touch</a>
@@ -516,27 +736,18 @@
   <div class="section-label reveal">Skills & Tools</div>
   <div class="skills-grid">
     <div class="reveal">
-      <div class="skill-group-title">Domains</div>
-      <div class="skill-list">
-        <div class="skill-item"><span class="skill-dot"></span>Ceramic Matrix Composites Design and Analysis</div>
-        <div class="skill-item"><span class="skill-dot"></span>Turbine Airfoils Design</div>
-        <div class="skill-item"><span class="skill-dot"></span>Naval Propulsion Systmes Design, Test, and Construction</div>
-        <div class="skill-item"><span class="skill-dot"></span>Ceramic Matrix Composites</div>
-      </div>
-    </div>
-    <div class="reveal">
       <div class="skill-group-title">CAD & Design</div>
       <div class="skill-list">
-        <div class="skill-item"><span class="skill-dot"></span>Siemens NX</div>
-        <div class="skill-item"><span class="skill-dot"></span>CATIA V5</div>
         <div class="skill-item"><span class="skill-dot"></span>SolidWorks</div>
-        <div class="skill-item"><span class="skill-dot"></span>Autodesk Inventor</div>
+        <div class="skill-item"><span class="skill-dot"></span>CATIA V5</div>
+        <div class="skill-item"><span class="skill-dot"></span>Fusion 360</div>
+        <div class="skill-item"><span class="skill-dot"></span>AutoCAD</div>
       </div>
     </div>
     <div class="reveal">
       <div class="skill-group-title">Simulation & Analysis</div>
       <div class="skill-list">
-        <div class="skill-item"><span class="skill-dot"></span>ANSYS Workbench</div>
+        <div class="skill-item"><span class="skill-dot"></span>ANSYS Mechanical</div>
         <div class="skill-item"><span class="skill-dot"></span>ANSYS Fluent (CFD)</div>
         <div class="skill-item"><span class="skill-dot"></span>Abaqus FEA</div>
         <div class="skill-item"><span class="skill-dot"></span>OpenFOAM</div>
@@ -552,12 +763,12 @@
       </div>
     </div>
     <div class="reveal">
-      <div class="skill-group-title">Model Based Systems Engineering</div>
+      <div class="skill-group-title">Domains</div>
       <div class="skill-list">
-        <div class="skill-item"><span class="skill-dot"></span>Siemens Teamcenter</div>
-        <div class="skill-item"><span class="skill-dot"></span>Siemens Cameo</div>
-        <div class="skill-item"><span class="skill-dot"></span>Tortoise SVN</div>
-        <div class="skill-item"><span class="skill-dot"></span>Github</div>
+        <div class="skill-item"><span class="skill-dot"></span>Structural Mechanics</div>
+        <div class="skill-item"><span class="skill-dot"></span>Aerodynamics & Propulsion</div>
+        <div class="skill-item"><span class="skill-dot"></span>GNC / Control Systems</div>
+        <div class="skill-item"><span class="skill-dot"></span>Composites & Materials</div>
       </div>
     </div>
   </div>
@@ -572,17 +783,17 @@
       <p class="contact-sub">Whether it's a project, a question, or just a conversation about engineering — feel free to reach out.</p>
     </div>
     <div class="contact-links reveal">
-      <a href="mailto:owenli10@gmail.com" class="contact-link">
+      <a href="/cdn-cgi/l/email-protection#b8d7cfddd696d4d1f8ddd5d9d1d496dbd7d5" class="contact-link">
         <div>
           <div class="cl-label">Email</div>
-          <div class="cl-val">owenli10@gmail.com</div>
+          <div class="cl-val"><span class="__cf_email__" data-cfemail="c1aeb6a4afefada881a4aca0a8adefa2aeac">[email&#160;protected]</span></div>
         </div>
         <span class="cl-arrow">→</span>
       </a>
-      <a href="https://linkedin.com/in/owenrli" target="_blank" class="contact-link">
+      <a href="https://linkedin.com/in/owenli" target="_blank" class="contact-link">
         <div>
           <div class="cl-label">LinkedIn</div>
-          <div class="cl-val">linkedin.com/in/owenrli</div>
+          <div class="cl-val">linkedin.com/in/owenli</div>
         </div>
         <span class="cl-arrow">→</span>
       </a>
@@ -629,7 +840,7 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   const projects = [
     {
       num: '01 / Project',
@@ -765,6 +976,25 @@
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── Dropdown ──
+  const dd = document.getElementById('navDropdown');
+  const btn = document.getElementById('navDropdownBtn');
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const isOpen = dd.classList.toggle('open');
+    btn.setAttribute('aria-expanded', isOpen);
+  });
+  document.addEventListener('click', () => {
+    dd.classList.remove('open');
+    btn.setAttribute('aria-expanded', false);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      dd.classList.remove('open');
+      btn.setAttribute('aria-expanded', false);
+    }
+  });
 </script>
 </body>
 </html>
